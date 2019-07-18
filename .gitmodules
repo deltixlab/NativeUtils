@@ -1,0 +1,3 @@
+[submodule "Zstandard"]
+	path = Zstandard
+	url = https://github.com/deltixlab/Zstandard.git

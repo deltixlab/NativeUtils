@@ -1,0 +1,30 @@
+plugins {
+    id 'application'
+}
+
+apply plugin: 'application'
+
+mainClassName = "deltix.NativeUtilsSample"
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+sourceSets {
+    main {
+        resources {
+            srcDirs = ["$rootDir/native-lib/bin/Release"]
+            include '**/*_so.zst'
+            include '**/*.dylib.zst'
+            include '**/*.dll.zst'
+        }
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation project(':java:rtmath-native-utils')
+}
+

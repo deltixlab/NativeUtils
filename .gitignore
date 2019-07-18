@@ -1,0 +1,17 @@
+**/bin/
+**/obj/
+**/java/*/build/
+/java/out/
+.idea/
+.gradle/
+.vs/
+*.user
+*.suo
+*.iml
+*.nupkg
+**/packages/*
+**/stdout*.txt
+**/TestResult.xml
+**/hs_err*.log
+
+

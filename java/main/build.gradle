@@ -1,0 +1,94 @@
+apply plugin: 'java'
+apply plugin: 'maven-publish'
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+repositories {
+    mavenCentral()
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir "$rootDir/Zstandard/java/src/main/java"
+        }
+    }
+
+    test {
+        resources {
+            srcDirs = ["$rootDir/native-lib/bin/Release", "$rootDir/native-lib/bin/dummy"]
+            include '**/*_so.zst'
+            include '**/*.dylib.zst'
+            include '**/*.dll.zst'
+            include '**/*.txt.zst'
+        }
+    }
+}
+
+dependencies {
+    testCompile 'junit:junit:4.+'
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+processTestResources {
+    // Move dummy payload files into different subdirs
+    String[] scatterPaths = ["Windows/32", "Windows/64", "Linux/32", "Linux/64"];
+    includeEmptyDirs = false // Otherwise empty dirs will still appear at the old location
+    eachFile {
+        details -> details.path = 'resources/' +
+            details.path.replaceAll('(dummy.)(.)(\\.txt\\.zst)',
+                {x -> scatterPaths[Integer.parseInt(x.get(2))] + '/' + x.get(1) + x.get(3)}
+        ) +
+          (details.path.contains('2-0-0') ? "[order@1]" : "") // priority test
+    }
+}
+
+jar {
+    manifest {
+        attributes 'Implementation-Title': 'Native Utils',
+            'Implementation-Version': version
+    }
+}
+
+
+task testJar(type: Jar, dependsOn: [jar, testClasses, processTestResources]) {
+
+    classifier = 'tests'
+    archiveName = 'tests.jar'
+    manifest {
+        attributes 'Implementation-Title': 'Native Utils Tests',
+            'Implementation-Version': version,
+            'Main-Class': 'rtmath.utilities.TestProgram',
+            'Class-Path': jar.archiveName
+    }
+
+    from sourceSets.test.output
+}
+
+task testFatJar(type: Jar, dependsOn: [classes, testClasses, processTestResources]) {
+
+    classifier = 'tests'
+    archiveName = 'testsFat.jar'
+    manifest {
+        attributes 'Implementation-Title': 'Native Utils Tests',
+            'Implementation-Version': version,
+            'Main-Class': 'rtmath.utilities.TestProgram'
+    }
+
+    from sourceSets.test.output, sourceSets.main.output
+}
+
+test {
+    dependsOn testFatJar
+    dependsOn testJar
+}

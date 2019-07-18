@@ -1,0 +1,52 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFrameworks>netstandard2.0;netstandard1.3;netcoreapp1.0;net40</TargetFrameworks>
+		<LangVersion>6</LangVersion>
+		<RootNamespace>Sample</RootNamespace>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<OutputPath>bin\$(Configuration)\</OutputPath>
+		<AssemblyName>SampleDll</AssemblyName>
+	  <Prefer32Bit>false</Prefer32Bit>
+		<RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
+	</PropertyGroup>
+	<ItemGroup>
+		<Compile Include="..\..\Zstandard\csharp\src\BitStream.cs" Link="ZStd\BitStream.cs" />
+		<Compile Include="..\..\Zstandard\csharp\src\blockType_e.cs" Link="ZStd\blockType_e.cs" />
+		<Compile Include="..\..\Zstandard\csharp\src\EntropyCommon.cs" Link="ZStd\EntropyCommon.cs" />
+		<Compile Include="..\..\Zstandard\csharp\src\FrameHeader.cs" Link="ZStd\FrameHeader.cs" />
+		<Compile Include="..\..\Zstandard\csharp\src\Fse.cs" Link="ZStd\Fse.cs" />
+		<Compile Include="..\..\Zstandard\csharp\src\FseDecompress.cs" Link="ZStd\FseDecompress.cs" />
+		<Compile Include="..\..\Zstandard\csharp\src\Huf.cs" Link="ZStd\Huf.cs" />
+		<Compile Include="..\..\Zstandard\csharp\src\HufDecompress.cs" Link="ZStd\HufDecompress.cs" />
+		<Compile Include="..\..\Zstandard\csharp\src\Mem.cs" Link="ZStd\Mem.cs" />
+		<Compile Include="..\..\Zstandard\csharp\src\XXH64_state_s.cs" Link="ZStd\XXH64_state_s.cs" />
+		<Compile Include="..\..\Zstandard\csharp\src\XxHash.cs" Link="ZStd\XxHash.cs" />
+		<Compile Include="..\..\Zstandard\csharp\src\ZStd.cs" Link="ZStd\ZStd.cs" />
+		<Compile Include="..\..\Zstandard\csharp\src\ZStdDecompress.cs" Link="ZStd\ZStdDecompress.cs" />
+		<Compile Include="..\..\Zstandard\csharp\src\ZStdErrors.cs" Link="ZStd\ZStdErrors.cs" />
+		<Compile Include="..\..\Zstandard\csharp\src\ZStdInternal.cs" Link="ZStd\ZStdInternal.cs" />
+		<Compile Include="..\..\Zstandard\csharp\src\ZSTD_format_e.cs" Link="ZStd\ZSTD_format_e.cs" />
+		<Compile Include="..\..\Zstandard\csharp\src\ZSTD_frameType_e.cs" Link="ZStd\ZSTD_frameType_e.cs" />
+		<Compile Include="..\NativeUtils\FileStream.cs" Link="NativeUtils\FileStream.cs" />
+		<Compile Include="..\NativeUtils\FileJanitor.cs" Link="NativeUtils\FileJanitor.cs" />
+		<Compile Include="..\NativeUtils\ResourceLoader.cs" Link="NativeUtils\ResourceLoader.cs" />
+		<Compile Include="..\NativeUtils\ResourceLoaderUtils.cs" Link="NativeUtils\ResourceLoaderUtils.cs" />
+
+	</ItemGroup>
+  <Choose>
+    <When Condition="Exists('..\..\native-lib\bin\Release\Windows\32\Sample.dll.zst')">
+      <ItemGroup>
+        <EmbeddedResource Include="..\..\native-lib\bin\Release\Windows\32\Sample.dll.zst" Link="Windows\x32\Sample_dll_zst" />
+        <EmbeddedResource Include="..\..\native-lib\bin\Release\Windows\64\Sample.dll.zst" Link="Windows\x64\Sample_dll_zst" />
+      </ItemGroup>
+    </When>
+  </Choose>
+  <Choose>
+    <When Condition="Exists('..\..\native-lib\bin\Release\Linux\32\libSample_so.zst')">
+      <ItemGroup>
+        <EmbeddedResource Include="..\..\native-lib\bin\Release\Linux\32\libSample_so.zst" Link="Linux\x32\libSample_so_zst" />
+        <EmbeddedResource Include="..\..\native-lib\bin\Release\Linux\64\libSample_so.zst" Link="Linux\x64\libSample_so_zst" />
+      </ItemGroup>
+    </When>
+  </Choose>
+</Project>
