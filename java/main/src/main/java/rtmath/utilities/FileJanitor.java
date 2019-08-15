@@ -230,12 +230,17 @@ public class FileJanitor {
 
         synchronized (_cleanupLock) {
             if (!_handlerRegistered) {
-                Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
-                    public void run() {
-                        tryCleanup();
-                    }
-                }));
-                _handlerRegistered = true;
+                try {
+                    Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+                        public void run() {
+                            tryCleanup();
+                        }
+                    }));
+
+                    _handlerRegistered = true;
+                } catch (IllegalStateException e) {
+                    // Already shutting down. Can't add shutdown hook at this point.
+                }
             }
         }
     }
