@@ -585,6 +585,14 @@ namespace RTMath.Utilities
 			// NOTE: We can't save the returned value of Create() call as a field, because its type differs between .NET frameworks
 			System.Security.Cryptography.RandomNumberGenerator.Create().GetBytes(buffer);
 			_rnd = new Random(BitConverter.ToInt32(buffer, 0));
+			String dbgCfg = Environment.GetEnvironmentVariable("NATIVEUTILS_RL_DEBUG");
+			try
+			{
+				Logger.SetLogLevel(Int32.Parse(dbgCfg));
+			}
+			catch
+			{
+			}
 		}
 
 		private ResourceLoader()

@@ -27,7 +27,15 @@ namespace RTMath.Utilities.ResourceLoaderUtils
 		public const int ERR = 4;
 		private static List<StreamWriter> _sinks = new List<StreamWriter>();
 
-		public const int LogLevel = ERR;
+		internal static int LogLevel
+		{
+			get
+			{
+				return logLevel;
+			}
+		}
+
+		private static int logLevel = ERR;
 
 		private static void LogLog(string v)
 		{
@@ -77,6 +85,11 @@ namespace RTMath.Utilities.ResourceLoaderUtils
 						return;
 				_sinks.Add(to);
 			}
+		}
+
+		internal static void SetLogLevel(int logLevel)
+		{
+			Logger.logLevel = logLevel;
 		}
 	}
 
