@@ -279,13 +279,21 @@ namespace RTMath.Utilities
 				else
 					dlerrorOSX();
 
-				return IsLinux
+				IntPtr handle = IsLinux
 					? dlopen(filePath, (int)dlOpenFlags)
 					: dlopenOSX(filePath, (int)dlOpenFlags);
+
+				if (Logger.LogLevelLeast(DBG))
+					Log($"IsLinux: {IsLinux} Flags: {dlOpenFlags} Handle: {handle} Error: {dlerror()}");
+
+				return handle;
 			}
 
 			internal static bool UnloadNativeLibrary(IntPtr handle)
 			{
+				if (Logger.LogLevelLeast(DBG))
+					Log($"Unload {handle}");
+
 				return IsWindows
 					? 0 != FreeLibrary(handle)
 					: 0 == (IsLinux ? dlclose(handle) : dlcloseOSX(handle));
