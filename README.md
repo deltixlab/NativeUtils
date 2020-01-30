@@ -24,7 +24,10 @@ This library is released under Apache 2.0 license. See ([license.txt](license.tx
 
 
 ## Requirements/dependencies
-Uses Deltix ZStandard decompressor <https://github.com/deltixlab/Zstandard.git>
+Uses Deltix ZStandard decompressor <https://github.com/deltixlab/Zstandard.git> as a submodule.
+(Don't forget `git submodule update --init` after checking out.)
+\
+In order to build the test sample, need to build sample native library via Cake script in `/csharp` 
 
 ### Java
 Requires a Java 1.8+ virtual machine containing the `sun.misc.Unsafe` interface running on a little endian platform.
@@ -40,6 +43,9 @@ Basic usage case is deploying and loading any files from a resource path specifi
 
 Optional configuration flags may be used to specify how the files are written and loaded.
 ### Java
+
+#### Java: Building
+`./gradlew jar`
 
 #### Java: Adding resources to your project
 This is an example of how you can add the resource files via Gradle build script:
@@ -71,7 +77,10 @@ dependencies {
 ResourceLoader.from("resources/$(OS)/$(ARCH)/*").to("some/path/$(ARCH)").load();
 ```
 
-### C#
+### .NET
+
+#### .NET: Building
+The library is supposed to be included by adding its source code files to your project (see below)
 
 #### .NET: Adding resources to your project
 Lets assume you have 4 versions of a native library for 2 platforms(Windows/Linux) and 2 architectures (32/64) and want to unpack/load it from your C# Library Assembly.
